@@ -1,0 +1,73 @@
+Path A: One Photo, Clean Data
+Phase 1 — Read a single photo's metadata
+Open one image with Pillow. Print its timestamp, camera model, dimensions.
+That is it. One photo, one printout.
+What you learn: EXIF data, how images are structured as files in Python.
+Phase 2 — Quality score that one photo
+Compute sharpness (variance of Laplacian) and brightness histogram on the same image.
+Print a score for each.
+What you learn: feature engineering, OpenCV basics.
+
+Path B: Scale to 5000
+Phase 3 — Walk the whole folder, build a CSV
+Run Phase 1 and 2 on every photo. Write results to a CSV, one row per photo.
+What you learn: filesystem traversal, pandas.
+Phase 4 — Deduplicate using perceptual hashing
+Group photos that look nearly identical, keep the sharpest one per burst.
+What you learn: imagehash, similarity as a numeric concept.
+Phase 5 — Face embeddings enter here
+Run a pretrained face detector on each photo, extract embedding vectors.
+What you learn: what a pretrained model actually outputs, what an embedding looks like.
+Phase 6 — Cluster the faces
+Run DBSCAN on the embeddings. Every photo of your sister gets the same label.
+What you learn: unsupervised ML, why density based clustering fits this problem.
+Phase 7 — Assemble the pipeline
+One script, folder in, sorted subfolders out, blurry and duplicate shots quarantined.
+
+
+# this is a function we are defiing the function get photo info 
+def function 
+
+
+#example cause i forgot how to do it.adding items to a dictionary
+
+# thisdict = {
+#     "brand": "ford",
+#     "model": "Mustang",
+#     "year": 1964 
+# }
+# x = {'type' : 'fruit', 'name' : 'apple'}
+# x.update({'color' : 'green'})
+# #do i have to mananully make the KEYS in the dictionary like "date" "camera", etc. or what.  
+
+
+# #would i make a varibak that takees its variabke names 
+
+
+No shame in stopping here, let's rebuild the goal in plain English before touching code at all.
+
+## What is this whole function actually for
+
+You have a photo file. That photo file has hidden information stored inside it, camera brand, date taken, that kind of thing. That hidden information is called EXIF data. Your goal, the whole point of `get_photo_info`, is: open the photo, pull out that hidden information, and show it to yourself in a readable way.
+
+## Where you are in that process right now
+
+1. You opened the photo. Done, that's `image = Image.open(path)`.
+2. You pulled out the hidden information. Done, that's `meta_data = image._getexif()`. At this point, `meta_data` is a dictionary full of entries, but every entry's label is a meaningless number, not a word. Something like `{271: "Canon", 306: "2024:03:15"}`, except in reality it's not two entries, it can be dozens.
+3. What's left, the part you're stuck on, is: go through that dictionary, and for every single entry, turn the meaningless number into an actual word, "Make" instead of `271`, and then show both the word and its value on screen.
+
+## Why a loop, restated simply
+
+Because there isn't one entry, there are many. You can't manually type "show me entry 271, now show me entry 306," you don't even know in advance how many entries a given photo will have. So you tell Python "for every entry in this dictionary, do the same thing," and it repeats that action automatically for each one, that repeating action is the loop.
+
+## What "the same thing" is, each time
+
+For one single entry, say `271` paired with `"Canon"`, the same thing means:
+
+- Take the number `271`.
+- Look up what word it stands for, "Make."
+- Print something like `Make: Canon`.
+
+That's it. That's the entire task inside the loop, nothing more.
+
+Does the goal make sense now, stripped down like this, before we write the line?
