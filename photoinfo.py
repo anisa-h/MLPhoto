@@ -19,5 +19,9 @@ def get_sharpness_score(path):
     image = cv2.imread(path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     laplacian = cv2.Laplacian(gray, cv2.CV_64F)
-    print( laplacian.var())
+    return(laplacian.var())
 get_sharpness_score("/Users/anisaraya/Desktop/repos/MLphoto/IMG_0179.JPG")
+
+filename = "IMG_0179.jpg"
+if filename.lower().endswith((".jpg", ".jpeg", ".png", ".heic")):
+    # run some tests
