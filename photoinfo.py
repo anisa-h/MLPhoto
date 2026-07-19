@@ -12,7 +12,7 @@ def get_photo_info (path):
         return
     for tag_id, value in meta_data.items(): 
         tag_name = TAGS.get(tag_id, tag_id) #this converts a number into its word
-        print(tag_name, value)
+        return(tag_name, value)
 get_photo_info("/Users/anisaraya/Desktop/repos/MLphoto/IMG_0179.JPG")
 
 def get_sharpness_score(path): 
