@@ -1,6 +1,7 @@
 import cv2
 import os 
 import csv
+import imagehash
 from PIL import Image
 from PIL.ExifTags import TAGS 
 
@@ -24,14 +25,19 @@ def get_photo_info (path):
             result["height"] = value
     
     return result 
-get_photo_info("/Users/anisaraya/Desktop/repos/MLphoto/IMG_0179.JPG")
+
 
 def get_sharpness_score(path): 
     image = cv2.imread(path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     laplacian = cv2.Laplacian(gray, cv2.CV_64F)
     return(laplacian.var())
-get_sharpness_score("/Users/anisaraya/Desktop/repos/MLphoto/IMG_0179.JPG")
+
+
+def get_hash_score(path):
+    score = imagehash.phash(Image.open(path))
+    return score
+#30+ means the photos are very unrelated, but single digts means its very likely a duplicate.
 
 folder_path = "/Users/anisaraya/Desktop/repos/MLphoto"
 all_photo_data=[]
@@ -41,10 +47,10 @@ for filename in os.listdir(folder_path):
 
         sharpness = get_sharpness_score(full_path)
         info = get_photo_info(full_path)
-
-        row = {"filename": filename, "sharpness": sharpness}
+        scoreinfo = get_hash_score(full_path)
+        row = {"filename": filename, "sharpness": sharpness, "hash": scoreinfo}
         row.update(info)
-
+    
         all_photo_data.append(row)
 
 with open("photos.csv", "w", newline="") as f:
@@ -54,3 +60,10 @@ with open("photos.csv", "w", newline="") as f:
 #open this file, call it f while I'm using it, and when I'm done with everything inside this indented block, close the file automatically, even if something goes wrong.
 
 print("done, wrote", len(all_photo_data), "rows")
+
+
+#sliding scale for the the 
+numbers = [3, 1, 2]
+print(sorted(numbers))
+
+sorted_photos = lambda timematters
