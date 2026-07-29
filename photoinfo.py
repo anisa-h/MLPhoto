@@ -4,21 +4,22 @@ import csv
 import imagehash
 from PIL import Image
 from PIL.ExifTags import TAGS 
+from datetime import datetime
 
 # / metadata time
 def get_photo_info (path):
     image = Image.open(path) #holds the photo itself, path was only tthere to tell what image.open(path) was suppose to do.
-    meta_data = image._getexif() 
+    meta_data = image._getexif() #this is the raw numerical data, unreadable data, 
     #loop time , it's the mechanism for reaching each individual pair, one at a time, so you can convert the tag ID into a readable name and print it clearly.
     result = {}
-
+ 
     if meta_data is None:
         print("No EXIF data found.")
         return
-    for tag_id, value in meta_data.items(): 
+    for tag_id, value in meta_data.items():  #we are editing the meta data, to be readable and understable. instead of numerical keys. we give them names.
         tag_name = TAGS.get(tag_id, tag_id) #this converts a number into its word
         if tag_name == "DateTimeOriginal":
-            result["date"] = value
+            result["date"] = value #dateTimeOrginal is not the key anymore. It is date that is the key. 
         if tag_name == "ExifImageWidth":
             result["width"] = value
         if tag_name == "ExifImageHeight":
@@ -30,7 +31,7 @@ def get_photo_info (path):
 def get_sharpness_score(path): 
     image = cv2.imread(path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    laplacian = cv2.Laplacian(gray, cv2.CV_64F)
+    laplacian = cv2.Laplacian (gray, cv2.CV_64F)
     return(laplacian.var())
 
 
@@ -66,4 +67,6 @@ print("done, wrote", len(all_photo_data), "rows")
 numbers = [3, 1, 2]
 print(sorted(numbers))
 
-sorted_photos = lambda timematters
+photos_time = lambda timematters : timematters ["date"] #we will want to take the date infromation 
+extracted_date = get_photo_info("/Users/anisaraya/Desktop/repos/MLphoto/isaur.jpeg") #the path to get there is this
+print(photos_time(extracted_date)) #from the get_photo_info, only date matters, from date, the values matter. 
