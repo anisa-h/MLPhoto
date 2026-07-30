@@ -70,4 +70,16 @@ For one single entry, say `271` paired with `"Canon"`, the same thing means:
 
 That's it. That's the entire task inside the loop, nothing more.
 
-Does the goal make sense now, stripped down like this, before we write the line?
+Does the goal make sense now, stripped down like this, before we write the line?\
+
+
+all_photo_data          <- the whole list, every photo
+  └── row (pass 1)      <- one dictionary, photo1's info
+  └── row (pass 2)      <- one dictionary, photo2's info
+  └── row (pass 3)      <- one dictionary, photo3's info
+  ...
+
+
+#okay Dictionary is A KEY- VALUE PAIR, 
+#each photo inside the all photos data is a list of dictiornaries. 
+#so i need to do read-and-update operation to every dictionary in the list 

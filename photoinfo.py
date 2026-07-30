@@ -27,20 +27,20 @@ def get_photo_info (path):
     
     return result 
 
-
 def get_sharpness_score(path): 
     image = cv2.imread(path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     laplacian = cv2.Laplacian (gray, cv2.CV_64F)
     return(laplacian.var())
 
-
 def get_hash_score(path):
     score = imagehash.phash(Image.open(path))
     return score
 #30+ means the photos are very unrelated, but single digts means its very likely a duplicate.
 
-folder_path = "/Users/anisaraya/Desktop/repos/MLphoto"
+folder_path = "/Users/anisaraya/Desktop/6.14.2026"
+#NEW FUNCTION, ALL_PHOTOS_DATA
+
 all_photo_data=[]
 for filename in os.listdir(folder_path):
     if filename.lower().endswith((".jpg", ".jpeg", ".png", ".heic")):
@@ -50,7 +50,7 @@ for filename in os.listdir(folder_path):
         info = get_photo_info(full_path)
         scoreinfo = get_hash_score(full_path)
         row = {"filename": filename, "sharpness": sharpness, "hash": scoreinfo}
-        row.update(info)
+        row.update(info)#adds all the info from allphotosinfo
     
         all_photo_data.append(row)
 
@@ -65,8 +65,34 @@ print("done, wrote", len(all_photo_data), "rows")
 
 #sliding scale for the the 
 numbers = [3, 1, 2]
-print(sorted(numbers))
+print(sorted(numbers)) #so sorted works with numbers. but we are not working with numbers we are working with time. 
 
-photos_time = lambda timematters : timematters ["date"] #we will want to take the date infromation 
-extracted_date = get_photo_info("/Users/anisaraya/Desktop/repos/MLphoto/isaur.jpeg") #the path to get there is this
-print(photos_time(extracted_date)) #from the get_photo_info, only date matters, from date, the values matter. 
+get_date = lambda photo: photo["date"] #we will want to take the date infromation 
+extracted_date = get_photo_info("/Users/anisaraya/Desktop/repos/MLphoto/photo1.jpeg") #the path to get there is this
+print(get_date(extracted_date)) #from the get_photo_info, only date matters, from date, the values matter. 
+stringdate =(get_date(extracted_date))
+
+#datetime.strptime(the_string, the_format)
+converted_date = datetime.strptime(stringdate, '%Y:%m:%d %H:%M:%S')
+#print(type(datetime.strptime(stringdate, '%Y:%m:%d %H:%M:%S')))
+#print(converted_date.year)
+#print(converted_date.hour)
+d1 = datetime.strptime("2026:06:12 23:04:55", "%Y:%m:%d %H:%M:%S")
+d2 = datetime.strptime("2026:06:12 23:06:10", "%Y:%m:%d %H:%M:%S")
+#print(d2 - d1)
+
+
+for row in all_photo_data:
+    row["date"] = datetime.strptime(row["date"], "%Y:%m:%d %H:%M:%S")#overwrites its "date" key with the new datetime object #using allphotosdata and all photos info we take the date of one photo and make it a datetimeclass
+
+sorted_photos = sorted(all_photo_data, key=get_date) 
+print(sorted_photos)
+
+for photo in sorted_photos:
+    print(photo["filename"], photo["date"])
+
+for i 
+git add .     
+git push origin main
+git commit -m ""
+
